@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, FlatList, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native';
 
 import SearchHeader from './components/searchHeader';
 import RenderImageItem from './components/renderImageItem';
@@ -8,6 +15,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [listData, setListData] = useState([]);
   const [listEnd, setListEnd] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const regex = new RegExp(searchText, 'i');
@@ -35,10 +43,12 @@ const App = () => {
       setListData(prevListData => [...prevListData, ...contentItems.content]);
       setPage(prevPage => prevPage + 1);
       setIsLoading(false);
+      setLoaded(true);
     } catch (error) {
       setIsLoading(false);
       console.log(JSON.stringify(error));
       console.error(error);
+      setLoaded(true);
     }
   };
 
@@ -84,19 +94,25 @@ const App = () => {
         searchText={searchText}
         handleTextChange={handleTextChange}
       />
-      <FlatList
-        data={filteredData}
-        renderItem={({item}) => <RenderImageItem item={item} />}
-        numColumns={3}
-        style={styles.listStyle}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => getRandomKey(item.name.toString())}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={footerComponent}
-        ListEmptyComponent={RenderEmptyComponent}
-      />
+      {loaded ? (
+        <FlatList
+          data={filteredData}
+          renderItem={({item}) => <RenderImageItem item={item} />}
+          numColumns={3}
+          style={styles.listStyle}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={item => getRandomKey(item.name.toString())}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={footerComponent}
+          ListEmptyComponent={RenderEmptyComponent}
+        />
+      ) : (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator color={'#fff'} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -129,5 +145,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: 20,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
