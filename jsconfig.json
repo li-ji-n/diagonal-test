@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "commonjs",
+      "baseUrl": "./src/", // all paths are relative to the baseUrl
+      "paths": {
+         // resolve any `@lib/foo` to `<baseUrl>/lib/foo`
+        "@json/*": ["assets/json/*"],
+         // resolve any `@lib` to `<baseUrl>/lib`
+         "@json": ["assets/json"],
+      }
+    }
+  }

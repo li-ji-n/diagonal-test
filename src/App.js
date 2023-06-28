@@ -1,34 +1,8 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  SafeAreaView,
-  Dimensions,
-  TextInput,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import Image from 'react-native-fast-image';
 import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View, FlatList, SafeAreaView} from 'react-native';
 
-const {width} = Dimensions.get('window');
-const renderImageItem = ({item}) => {
-  const imagePath = `file:////Users/lijinp/Documents/Demo/Diagonal/src/assets/images/${item['poster-image']}`;
-  return (
-    <View style={styles.renderItem}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: imagePath,
-          priority: Image.priority.normal,
-        }}
-      />
-      <Text numberOfLines={2} style={styles.name}>
-        {item.name}
-      </Text>
-    </View>
-  );
-};
+import SearchHeader from './components/searchHeader';
+import RenderImageItem from './components/renderImageItem';
 
 const App = () => {
   const [page, setPage] = useState(1);
@@ -38,62 +12,63 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const regex = new RegExp(searchText, 'i');
 
-  const fetchData = async page => {
+  const fetchData = async () => {
     try {
-      console.log('Called');
       setIsLoading(true);
       const response = await fetch(
-        `file:////Users/lijinp/Documents/Demo/Diagonal/src/assets/json/CONTENTLISTINGPAGE-PAGE${page}.json`,
+        `https://li-ji-n.github.io/JsonData/CONTENTLISTINGPAGE-PAGE${page}.json`,
       );
       const data = await response.json();
-
       const {
         'total-content-items': totalContentItems,
         'page-size-returned': pageSizeReturned,
         'content-items': contentItems,
       } = data.page;
-    //   const filteredContentItems = contentItems.content.filter(item =>
-    //     regex.test(item.name),
-    //   );
+
       if (
         parseInt(totalContentItems) ===
         listData.length + parseInt(pageSizeReturned)
       ) {
-        // if (filteredContentItems.length < 1) {
-        //     fetchData(page + 1);
-        //   }
         setListEnd(true);
       }
 
-      //   setListData(prev => [...prev, ...filteredContentItems]);
-      setListData(prev => [...prev, ...contentItems.content]);
-      setPage(prev => prev + 1);
+      setListData(prevListData => [...prevListData, ...contentItems.content]);
+      setPage(prevPage => prevPage + 1);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      console.log(JSON.stringify(error));
       console.error(error);
     }
   };
 
-  const filteredData = listData.filter(item => regex.test(item.name));
   useEffect(() => {
-    fetchData(page);
+    fetchData();
   }, []);
+
   const handleEndReached = () => {
     if (!isLoading && !listEnd) {
-      fetchData(page);
+      fetchData();
     }
   };
-  function getRandomKey(name) {
+
+  const getRandomKey = name => {
     return name + Math.random().toString(36).substr(2, 9);
-  }
+  };
+
   const handleTextChange = text => {
     setSearchText(text);
   };
-  const renderEmptyComponent = () => {
-    if (searchText && !isLoading && !listEnd) {
-      handleEndReached();
-    }
+
+  const filteredData = listData.filter(item => regex.test(item.name));
+
+  const RenderEmptyComponent = () => {
+    useEffect(() => {
+      if (searchText && !isLoading && !listEnd) {
+        handleEndReached();
+      }
+    }, []);
+
     return (
       <View style={styles.noDataContainer}>
         <Text style={styles.noDataText}>No data found!</Text>
@@ -101,35 +76,26 @@ const App = () => {
     );
   };
 
+  const footerComponent = () => <View style={styles.footer} />;
+
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        style={styles.searchBarContainer}
-        colors={['#000', '#000', '#000', 'transparent']}>
-        <TextInput
-          style={styles.searchText}
-          placeholder="Search"
-          value={searchText}
-          onChangeText={handleTextChange}
-        />
-        <Image
-          style={styles.searchIcon}
-          source={require('./assets/images/search.png')}
-        />
-      </LinearGradient>
+      <SearchHeader
+        searchText={searchText}
+        handleTextChange={handleTextChange}
+      />
       <FlatList
         data={filteredData}
-        // data={listData}
-        renderItem={renderImageItem}
+        renderItem={({item}) => <RenderImageItem item={item} />}
         numColumns={3}
         style={styles.listStyle}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => getRandomKey(item.name.toString())}
         onEndReached={handleEndReached}
-        onEndReachedThreshold={0.3}
-        ListFooterComponent={<View style={{height: 20}} />}
-        ListEmptyComponent={renderEmptyComponent}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={footerComponent}
+        ListEmptyComponent={RenderEmptyComponent}
       />
     </SafeAreaView>
   );
@@ -141,25 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
-    paddingBottom: 40,
-  },
-  searchBarContainer: {
-    height: 70,
-    width: '100%',
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  searchText: {
-    flex: 1,
-    fontSize: 20,
-    color: '#fff',
-  },
-  searchIcon: {
-    width: 20,
-    height: 20,
   },
   listStyle: {
     marginTop: -30,
@@ -170,23 +117,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flexGrow: 1,
   },
-  renderItem: {
-    marginTop: 16,
-    marginBottom: 24,
-    marginHorizontal: 15,
-    width: (width - 90) / 3,
-    // backgroundColor: 'red',
-  },
-  image: {
-    width: '100%',
-    aspectRatio: 0.669,
-    marginVertical: 5,
-  },
-  name: {
-    color: '#fff',
-    fontSize: 14,
-    textAlign: 'left',
-  },
   noDataContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -195,5 +125,9 @@ const styles = StyleSheet.create({
   noDataText: {
     color: '#fff',
     fontSize: 14,
+    fontFamily: 'TitilliumWeb-Light',
+  },
+  footer: {
+    height: 20,
   },
 });
