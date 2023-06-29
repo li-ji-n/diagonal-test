@@ -16,7 +16,10 @@ const SearchHeader = ({searchText, handleTextChange}) => {
       style={styles.searchBarContainer}
       colors={['#000', '#000', '#000', 'transparent']}>
       <TouchableOpacity>
-        <Text style={styles.backIcon}>{Platform.OS === 'ios' ? '←' : '<'}</Text>
+        <Image
+          style={styles.backIcon}
+          source={require('../assets/icons/arrow.png')}
+        />
       </TouchableOpacity>
       <TextInput
         style={styles.searchText}
@@ -54,12 +57,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   backIcon: {
-    color: '#fff',
-    fontSize: 25,
-    marginRight: 5,
-    fontWeight: '700',
-    paddingRight: 10,
-    textAlignVertical: 'center',
+    width: 20,
+    height: 20,
+    marginLeft: 5,
+    marginRight: 15,
+    tintColor: '#fff',
   },
   searchText: {
     flex: 1,
