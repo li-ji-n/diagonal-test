@@ -1,4 +1,11 @@
-import {StyleSheet, TextInput, Image, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import React, {useRef} from 'react';
 
@@ -8,6 +15,9 @@ const SearchHeader = ({searchText, handleTextChange}) => {
     <LinearGradient
       style={styles.searchBarContainer}
       colors={['#000', '#000', '#000', 'transparent']}>
+      <TouchableOpacity>
+        <Text style={styles.backIcon}>{Platform.OS === 'ios' ? '←' : '<'}</Text>
+      </TouchableOpacity>
       <TextInput
         style={styles.searchText}
         ref={searchRef}
@@ -24,7 +34,7 @@ const SearchHeader = ({searchText, handleTextChange}) => {
         }}>
         <Image
           style={styles.searchIcon}
-          source={require('../assets/images/search.png')}
+          source={require('../assets/icons/search.png')}
         />
       </TouchableOpacity>
     </LinearGradient>
@@ -42,6 +52,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     zIndex: 1,
+  },
+  backIcon: {
+    color: '#fff',
+    fontSize: 25,
+    marginRight: 5,
+    fontWeight: '700',
+    paddingRight: 10,
+    textAlignVertical: 'center',
   },
   searchText: {
     flex: 1,

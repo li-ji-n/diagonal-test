@@ -22,7 +22,7 @@ const RenderImageItem = ({item}) => {
           onError={() => setError(true)}
         />
       )}
-      <Text numberOfLines={2} style={styles.name}>
+      <Text numberOfLines={1} style={styles.name}>
         {item.name}
       </Text>
     </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 24,
     marginHorizontal: 10,
-    width: (width - 60) / 3,
+    width: (width - 80) / 3,
   },
   errorImage: {
     width: '100%',

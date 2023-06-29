@@ -127,8 +127,9 @@ const styles = StyleSheet.create({
   listStyle: {
     marginTop: -30,
     paddingTop: 10,
-    backgroundColor: '#000',
     height: '100%',
+    paddingHorizontal: 10,
+    backgroundColor: '#000',
   },
   listContainer: {
     flexGrow: 1,
