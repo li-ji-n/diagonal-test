@@ -10,8 +10,6 @@ This is a React Native app called Diagnal that displays a list of images from an
 - Uses the React Native Fast Image component for optimized image loading.
 - Supports pagination for loading more images when scrolling to the end.
 
-## Note
-- The back button in the app's display has no functionality. To implement a functional back button, additional packages might be required, which could increase the app's size. Currently, a text-based back button is used for Android, and a symbol is used for iOS.
 
 ## Installation
 
