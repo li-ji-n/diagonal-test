@@ -57,6 +57,10 @@ These dependencies are managed using npm and will be installed automatically whe
 
 
 ### Conclusion
+
+## Desin
+In the shared design, the padding values are marked with a large margin. However, when I apply those exact values to the elements, they appear different compared to the design you provided. Consequently, the layout doesn't look good. Additionally, the specified font sizes also appear larger than expected when using the exact values. Considering your reply to my query, I choose the values accordingly.
+
 ## Image Display Options
 
 In our application, we have two options for displaying images: using preloaded images from the project folder or fetching images from a remote source. After careful consideration, we have decided to implement the remote fetch method. This allows for more flexibility in image selection and reduces the app's size.
