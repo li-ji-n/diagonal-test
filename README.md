@@ -1,6 +1,6 @@
-# Diagonal React Native App
+# Diagnal React Native App
 
-This is a React Native app called Diagonal that displays a list of images from an OTT platform. The user can search for specific images using the search bar. The app loads data from JSON files and uses the React Native Fast Image component to display images efficiently.
+This is a React Native app called Diagnal that displays a list of images from an OTT platform. The user can search for specific films using the search bar. The app loads data from JSON files and uses the React Native Fast Image component to display images efficiently.
 
 ## Features
 
