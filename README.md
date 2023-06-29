@@ -42,7 +42,7 @@ Make sure you have the necessary development environment set up for React Native
 ## Project Structure
 
 - `App.js`: The main entry point of the application.
-- `src/assets`: Contains JSON files representing the content listings and images used in the app.
+- `src/assets`: Contains asset files used in the app.
 - `src/components`: Contains reusable components used in the app.
 
 
